@@ -10,6 +10,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +22,8 @@ import lombok.ToString;
 
 /**
  * Metadata for a protected project memoir PDF.
+ * A project can store only one memoir, and memoir upload is restricted to student
+ * final-year projects or postgraduate theses.
  */
 @Entity
 @Table(name = "memoir_files", indexes = {
@@ -64,6 +68,23 @@ public class MemoirFile extends BaseEntity {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private Project project;
+
+    @PrePersist
+    @PreUpdate
+    void validateMemoirRules() {
+        if (project == null || project.getSubmittedBy() == null || project.getType() == null) {
+            return;
+        }
+
+        if (project.getSubmittedBy().getRole() != User.UserRole.STUDENT) {
+            throw new IllegalStateException("Only students can upload a memoir file.");
+        }
+
+        if (project.getType() == Project.ProjectType.COURSEWORK) {
+            throw new IllegalStateException(
+                    "Memoir files are only allowed for final year projects or postgraduate theses.");
+        }
+    }
 
     public enum MemoirScanStatus {
         PENDING,

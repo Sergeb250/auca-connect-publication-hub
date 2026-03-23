@@ -105,6 +105,12 @@ Important attributes:
 - `reservationCount`: total memoir reservations
 - `publishedAt`: moderation publish time
 
+Project memoir rule:
+
+- only student-owned projects should carry a memoir file
+- a project can only have one memoir because `MemoirFile` is one-to-one
+- memoir upload is meant for final year projects and postgraduate theses
+
 Relationships:
 
 - submitted by one `User`
@@ -150,6 +156,11 @@ Relationship:
 
 - belongs to one `Project`
 
+Rule:
+
+- memoir upload is restricted to student projects
+- coursework projects should not carry a memoir file
+
 ### `GithubRepo`
 
 Stores GitHub repository metadata attached to a project.
@@ -161,10 +172,14 @@ Important attributes:
 - `finalCommitHash`: academic final snapshot
 - `finalCommitMessage`, `finalTag`: submission markers
 - `readmeContent`: cached README content
+- `sourceTreeJson`: cached repository tree for in-platform browsing
+- `repositorySnapshotPath`: cached source snapshot path
 - `primaryLanguage`: detected main language
 - `starCount`, `forkCount`: GitHub engagement
 - `isPrivate`: private/public state
+- `embeddedViewEnabled`: whether platform code viewing is enabled
 - `lastSyncedAt`: last GitHub sync
+- `lastSourceIndexedAt`: last source viewer refresh
 
 Relationship:
 
@@ -380,3 +395,16 @@ Important attributes:
 - `lastModifiedBy`: last admin identity
 
 This model has no relationships because it is read by services across the system.
+
+## Storage
+
+The platform is configured to use a Supabase S3-compatible bucket named `connect`.
+
+Main folders:
+
+- `profile-avatars`: user avatar images
+- `memoirs`: thesis and memoir PDF files
+- `publication-files`: publication documents
+- `github-snapshots`: cached GitHub source snapshots for in-platform viewing
+
+The endpoint, region, and bucket are configured in `application.properties`. Access credentials are expected from environment variables so secrets are not hardcoded in source.

@@ -38,10 +38,10 @@ public class CampusProfile extends BaseEntity {
     @Column(name = "campus_id", nullable = false, unique = true)
     private String campusId;
 
-    @Column(name = "faculty", nullable = false)
+    @Column(name = "faculty")
     private String faculty;
 
-    @Column(name = "department", nullable = false)
+    @Column(name = "department")
     private String department;
 
     @Column(name = "academic_year")

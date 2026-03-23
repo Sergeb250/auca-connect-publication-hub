@@ -57,6 +57,12 @@ public class GithubRepo extends BaseEntity {
     @Column(name = "readme_content", columnDefinition = "TEXT")
     private String readmeContent;
 
+    @Column(name = "source_tree_json", columnDefinition = "TEXT")
+    private String sourceTreeJson;
+
+    @Column(name = "repository_snapshot_path")
+    private String repositorySnapshotPath;
+
     @Column(name = "primary_language")
     private String primaryLanguage;
 
@@ -72,8 +78,15 @@ public class GithubRepo extends BaseEntity {
     @Column(name = "is_private", nullable = false)
     private Boolean isPrivate = false;
 
+    @Builder.Default
+    @Column(name = "embedded_view_enabled", nullable = false)
+    private Boolean embeddedViewEnabled = true;
+
     @Column(name = "last_synced_at")
     private LocalDateTime lastSyncedAt;
+
+    @Column(name = "last_source_indexed_at")
+    private LocalDateTime lastSourceIndexedAt;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id", nullable = false, unique = true)

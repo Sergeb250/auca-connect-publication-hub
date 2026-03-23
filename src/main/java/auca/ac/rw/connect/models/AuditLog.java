@@ -68,6 +68,7 @@ public class AuditLog extends AppendOnlyBaseEntity {
         LOGIN,
         LOGOUT,
         LOGIN_FAILED,
+        PASSWORD_CHANGED,
         PROJECT_SUBMITTED,
         PROJECT_PUBLISHED,
         PROJECT_REJECTED,

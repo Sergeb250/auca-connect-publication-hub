@@ -14,6 +14,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.OrderBy;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -147,6 +149,18 @@ public class Project extends BaseEntity {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     private List<Waitlist> waitlistEntries = new ArrayList<>();
+
+    @PrePersist
+    @PreUpdate
+    void validateProjectOwner() {
+        if (submittedBy == null || submittedBy.getRole() == null) {
+            return;
+        }
+
+        if (submittedBy.getRole() != User.UserRole.STUDENT) {
+            throw new IllegalStateException("Projects can only be submitted by users with the STUDENT role.");
+        }
+    }
 
     public enum ProjectCategory {
         SOFTWARE_SYSTEM,
