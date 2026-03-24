@@ -1,0 +1,16 @@
+.git
+.gitignore
+.idea
+.vscode
+.m2
+target
+**/target
+*.log
+HELP.md
+AUTH_API_TESTING.md
+PART2_AUTH_FLOW.md
+AUCA_BACKEND_FEATURES_ENDPOINTS (1).md
+.env
+.env.*
+!.env.example
+
